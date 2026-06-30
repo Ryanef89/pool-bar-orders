@@ -1,73 +1,55 @@
 import { useEffect, useState } from "react";
 import { listenOrders } from "../../services/orderListener";
-import { updateOrderStatus } from "../../services/updateOrderStatus";
+import OrderCard from "../../components/OrderCard";
 
 function Dashboard() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     const unsubscribe = listenOrders(setOrders);
-
     return () => unsubscribe();
   }, []);
 
   return (
-    <div style={{ padding: 30 }}>
-      <h1>🍹 Dashboard Bar</h1>
+    <div
+      style={{
+        background: "#f4f6f9",
+        minHeight: "100vh",
+        padding: "30px"
+      }}
+    >
+      <h1 style={{ marginBottom: "10px" }}>
+        🍹 Dashboard Pool Bar
+      </h1>
 
-      <h2>Ordini Live</h2>
+      <p
+        style={{
+          color: "#666",
+          marginBottom: "30px"
+        }}
+      >
+        Ordini in tempo reale
+      </p>
 
-      {orders.length === 0 && <p>Nessun ordine.</p>}
-
-      {orders.map((order) => (
+      {orders.length === 0 ? (
         <div
-          key={order.id}
           style={{
-            border: "1px solid #ddd",
-            padding: 20,
-            marginBottom: 20,
-            borderRadius: 12,
             background: "white",
+            padding: "30px",
+            borderRadius: "15px",
+            textAlign: "center"
           }}
         >
-          <h3>🏖 Ombrellone {order.ombrellone}</h3>
-
-          <p>
-            <strong>Stato:</strong> {order.status}
-          </p>
-
-          <hr />
-
-          {order.items.map((item) => (
-            <div key={item.id}>
-              {item.quantity} × {item.name}
-            </div>
-          ))}
-
-          <hr />
-
-          <h3>Totale € {order.total.toFixed(2)}</h3>
-
-          <div style={{ marginTop: 20 }}>
-            <button
-              onClick={() =>
-                updateOrderStatus(order.id, "Preparazione")
-              }
-            >
-              👨‍🍳 In preparazione
-            </button>
-
-            <button
-              style={{ marginLeft: 10 }}
-              onClick={() =>
-                updateOrderStatus(order.id, "Consegnato")
-              }
-            >
-              ✅ Consegnato
-            </button>
-          </div>
+          Nessun ordine.
         </div>
-      ))}
+      ) : (
+        orders.map((order) => (
+          <OrderCard
+            key={order.id}
+            order={order}
+          />
+        ))
+      )}
     </div>
   );
 }
