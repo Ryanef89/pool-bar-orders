@@ -1,17 +1,29 @@
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+} from "firebase/firestore";
+
 import { db } from "../firebase/firebase";
 
 export async function sendOrder(order) {
   try {
-    await addDoc(collection(db, "orders"), {
+    const docRef = await addDoc(collection(db, "orders"), {
       ...order,
       status: "new",
       createdAt: serverTimestamp(),
     });
 
-    return true;
+    return {
+      success: true,
+      orderId: docRef.id,
+    };
   } catch (error) {
     console.error(error);
-    return false;
+
+    return {
+      success: false,
+      orderId: null,
+    };
   }
 }

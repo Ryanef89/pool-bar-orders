@@ -1,30 +1,37 @@
 import "./FloatingCart.css";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import CheckoutButton from "./CheckoutButton";
 
 function FloatingCart() {
-  const { items, total } = useCart();
+  const navigate = useNavigate();
 
-  const quantity = items.reduce(
+  const { cart } = useCart();
+
+  const totalItems = cart.reduce(
     (sum, item) => sum + item.quantity,
     0
   );
 
-  if (quantity === 0) return null;
+  const totalPrice = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  if (cart.length === 0) return null;
 
   return (
-    <div className="cartBar">
-
-      <div className="cartInfo">
-
-        <strong>{quantity} articoli</strong>
-
-        <span>Totale € {total.toFixed(2)}</span>
-
+    <div className="floating-cart">
+      <div>
+        <strong>{totalItems}</strong> prodotti
+        <br />
+        <span>€ {totalPrice.toFixed(2)}</span>
       </div>
 
-      <CheckoutButton />
-
+      <button
+        onClick={() => navigate("/cart")}
+      >
+        Vai al carrello →
+      </button>
     </div>
   );
 }

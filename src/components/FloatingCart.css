@@ -1,43 +1,54 @@
-.cartBar{
+.floating-cart{
+    position:fixed;
+    left:20px;
+    right:20px;
+    bottom:20px;
 
-position:fixed;
+    background:#0b8457;
 
-bottom:0;
+    color:white;
 
-left:0;
+    border-radius:18px;
 
-right:0;
+    padding:18px 22px;
 
-background:white;
+    display:flex;
 
-padding:20px;
+    justify-content:space-between;
 
-display:flex;
+    align-items:center;
 
-justify-content:space-between;
+    box-shadow:0 12px 30px rgba(0,0,0,.25);
 
-align-items:center;
-
-box-shadow:0 -5px 20px rgba(0,0,0,.15);
-
-z-index:999;
-
+    z-index:999;
 }
 
-.cartInfo{
-
-display:flex;
-
-flex-direction:column;
-
-font-size:18px;
-
+.floating-cart strong{
+    font-size:22px;
 }
 
-.cartInfo span{
+.floating-cart span{
+    font-size:20px;
+}
 
-color:#666;
+.floating-cart button{
+    border:none;
 
-margin-top:5px;
+    background:white;
 
+    color:#0b8457;
+
+    font-weight:bold;
+
+    border-radius:12px;
+
+    padding:12px 20px;
+
+    cursor:pointer;
+
+    font-size:16px;
+}
+
+.floating-cart button:hover{
+    opacity:.9;
 }

@@ -1,14 +1,23 @@
+import "./OrderCard.css";
+import OrderTimer from "./admin/OrderTimer";
 import { updateOrderStatus } from "../services/updateOrderStatus";
+import { announceOrder } from "../services/speechService";
 
 function OrderCard({ order }) {
   function getStatusColor(status) {
     switch (status) {
       case "new":
-        return "#dc3545"; // rosso
+        return "#dc3545";
+
       case "Preparazione":
-        return "#ffc107"; // giallo
+        return "#ffc107";
+
       case "Consegnato":
-        return "#28a745"; // verde
+        return "#198754";
+
+      case "Archiviato":
+        return "#6c757d";
+
       default:
         return "#6c757d";
     }
@@ -16,75 +25,82 @@ function OrderCard({ order }) {
 
   return (
     <div
+      className="order-card"
       style={{
-        background: "white",
-        padding: "20px",
-        borderRadius: "15px",
-        marginBottom: "20px",
-        boxShadow: "0 5px 15px rgba(0,0,0,.15)",
-        borderLeft: `8px solid ${getStatusColor(order.status)}`
+        borderLeft: `8px solid ${getStatusColor(order.status)}`,
       }}
     >
-      <h2>🏖 Ombrellone {order.ombrellone}</h2>
+      <div className="order-header">
+        <h2>🏖 {order.ombrellone}</h2>
+
+        {order.createdAt && (
+          <OrderTimer createdAt={order.createdAt} />
+        )}
+      </div>
 
       <div
+        className="status"
         style={{
-          display: "inline-block",
           background: getStatusColor(order.status),
-          color: "white",
-          padding: "6px 12px",
-          borderRadius: "20px",
-          fontWeight: "bold",
-          marginBottom: "15px"
         }}
       >
         {order.status}
       </div>
 
-      <hr />
+      <div className="items">
+        {order.items.map((item) => (
+          <div
+            key={item.id}
+            className="item"
+          >
+            <span>{item.name}</span>
 
-      {order.items.map((item) => (
-        <div
-          key={item.id}
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginBottom: "8px",
-            fontSize: "18px"
-          }}
-        >
-          <span>{item.name}</span>
-          <strong>x{item.quantity}</strong>
-        </div>
-      ))}
+            <strong>x{item.quantity}</strong>
+          </div>
+        ))}
+      </div>
 
-      <hr />
+      <div className="total">
+        € {Number(order.total).toFixed(2)}
+      </div>
 
-      <h2 style={{ color: "#198754" }}>
-        Totale € {order.total.toFixed(2)}
-      </h2>
-
-      <div
-        style={{
-          marginTop: "20px",
-          display: "flex",
-          gap: "10px"
-        }}
-      >
+      <div className="actions">
         <button
+          className="prep"
           onClick={() =>
-            updateOrderStatus(order.id, "Preparazione")
+            updateOrderStatus(
+              order.id,
+              "Preparazione"
+            )
           }
         >
-          👨‍🍳 Preparazione
+          👨‍🍳
         </button>
 
         <button
+          className="done"
+          onClick={async () => {
+            await updateOrderStatus(
+              order.id,
+              "Consegnato"
+            );
+
+            announceOrder(order.ombrellone);
+          }}
+        >
+          ✅
+        </button>
+
+        <button
+          className="archive"
           onClick={() =>
-            updateOrderStatus(order.id, "Consegnato")
+            updateOrderStatus(
+              order.id,
+              "Archiviato"
+            )
           }
         >
-          ✅ Consegnato
+          📦
         </button>
       </div>
     </div>

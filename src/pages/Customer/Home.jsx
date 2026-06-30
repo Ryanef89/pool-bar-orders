@@ -1,83 +1,136 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./Home.css";
 
-import menu from "../../data/menu";
 import ProductCard from "../../components/ProductCard";
 import FloatingCart from "../../components/FloatingCart";
+import { getAvailableProducts } from "../../services/productService";
+
+const categoryOrder = [
+  "Bibite",
+  "Birre",
+  "Cocktail",
+  "Panini",
+  "Snack",
+  "Gelati",
+];
+
+const categoryIcons = {
+  Bibite: "🥤",
+  Birre: "🍺",
+  Cocktail: "🍹",
+  Panini: "🍔",
+  Snack: "🍟",
+  Gelati: "🍦",
+};
 
 function Home() {
+  const [products, setProducts] = useState([]);
   const [ombrellone, setOmbrellone] = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    console.log("URL completa:", window.location.href);
+    loadProducts();
 
     const params = new URLSearchParams(window.location.search);
 
-    console.log("Query string:", window.location.search);
-
     const numero = params.get("ombrellone");
-
-    console.log("Parametro ombrellone:", numero);
 
     if (numero) {
       localStorage.setItem("ombrellone", numero);
       setOmbrellone(numero);
     } else {
-      const salvato = localStorage.getItem("ombrellone");
+      const saved = localStorage.getItem("ombrellone");
 
-      console.log("Ombrellone salvato:", salvato);
-
-      if (salvato) {
-        setOmbrellone(salvato);
+      if (saved) {
+        setOmbrellone(saved);
       }
     }
   }, []);
+
+  async function loadProducts() {
+    const data = await getAvailableProducts();
+    setProducts(data);
+  }
+
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const text = (
+        product.name +
+        " " +
+        (product.description || "")
+      ).toLowerCase();
+
+      return text.includes(search.toLowerCase());
+    });
+  }, [products, search]);
+
+  const groupedProducts = useMemo(() => {
+    return filteredProducts.reduce((groups, product) => {
+      if (!groups[product.category]) {
+        groups[product.category] = [];
+      }
+
+      groups[product.category].push(product);
+
+      return groups;
+    }, {});
+  }, [filteredProducts]);
 
   return (
     <div className="home">
       <header className="header">
         <h1>🏖 Toscana Sport Resort</h1>
+
         <p>Pool Bar</p>
 
-        {ombrellone ? (
-          <div
-            style={{
-              background: "#198754",
-              color: "#fff",
-              padding: "15px",
-              borderRadius: "12px",
-              marginTop: "20px",
-              fontSize: "22px",
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            🏖 Ombrellone {ombrellone}
-          </div>
-        ) : (
-          <div
-            style={{
-              background: "#ffc107",
-              color: "#000",
-              padding: "15px",
-              borderRadius: "12px",
-              marginTop: "20px",
-              textAlign: "center",
-            }}
-          >
-            ⚠️ Nessun ombrellone selezionato
-          </div>
-        )}
+        <div className="tableBox">
+          {ombrellone
+            ? `🏖 Ombrellone ${ombrellone}`
+            : "⚠️ Nessun ombrellone"}
+        </div>
       </header>
 
-      <h2>Bibite</h2>
-
-      {menu.map((product) => (
-        <ProductCard
-          key={product.id}
-          product={product}
+      <div className="searchBox">
+        <input
+          type="text"
+          placeholder="🔍 Cerca prodotto..."
+          value={search}
+          onChange={(e) =>
+            setSearch(e.target.value)
+          }
         />
-      ))}
+      </div>
+
+      {filteredProducts.length === 0 ? (
+        <div className="emptyProducts">
+          Nessun prodotto trovato.
+        </div>
+      ) : (
+        categoryOrder.map((category) => {
+          if (!groupedProducts[category]) return null;
+
+          return (
+            <div key={category}>
+              <div className="categoryTitle">
+                <span>
+                  {categoryIcons[category]}
+                </span>
+
+                <span>{category}</span>
+              </div>
+
+              {groupedProducts[category].map(
+                (product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                  />
+                )
+              )}
+            </div>
+          );
+        })
+      )}
 
       <FloatingCart />
     </div>

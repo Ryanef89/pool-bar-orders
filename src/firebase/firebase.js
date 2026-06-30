@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBgaVaydRTfnoGWIAJS7o_ujQkDpwMn3Bw",
@@ -7,9 +8,10 @@ const firebaseConfig = {
   projectId: "pool-bar-orders",
   storageBucket: "pool-bar-orders.firebasestorage.app",
   messagingSenderId: "200582800468",
-  appId: "1:200582800468:web:95e429dd392e3f588579c1"
+  appId: "1:200582800468:web:95e429dd392e3f588579c1",
 };
 
 const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
+export const storage = getStorage(app);

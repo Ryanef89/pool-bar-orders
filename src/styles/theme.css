@@ -1,0 +1,32 @@
+:root {
+  --primary: #0b8457;
+  --primary-dark: #086944;
+
+  --secondary: #f4f7fb;
+
+  --success: #198754;
+  --warning: #ffc107;
+  --danger: #dc3545;
+
+  --text: #2d3436;
+  --text-light: #636e72;
+
+  --white: #ffffff;
+
+  --radius: 16px;
+
+  --shadow:
+    0 8px 20px rgba(0,0,0,.08);
+
+  --transition: .2s ease;
+}
+
+body{
+    background:var(--secondary);
+    color:var(--text);
+    font-family:
+      Inter,
+      Arial,
+      Helvetica,
+      sans-serif;
+}

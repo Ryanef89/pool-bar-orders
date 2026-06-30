@@ -1,110 +1,81 @@
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
-    font-family:Arial, Helvetica, sans-serif;
-    background:#f5f5f5;
+    background:#f4f6f9;
+    font-family:Inter,Arial,sans-serif;
 }
 
 .home{
-    max-width:500px;
+    max-width:700px;
     margin:auto;
     padding:20px;
+    padding-bottom:120px;
 }
 
 .header{
-    text-align:center;
-    margin-top:30px;
-    margin-bottom:30px;
+    background:linear-gradient(135deg,#0b8457,#16a085);
+    color:white;
+    padding:30px;
+    border-radius:24px;
+    margin-bottom:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
 }
 
 .header h1{
-    color:#6d213c;
     margin:0;
+    font-size:34px;
 }
 
 .header p{
-    color:#666;
+    margin-top:8px;
+    opacity:.9;
+    font-size:18px;
 }
 
 .tableBox{
-    background:white;
-    padding:20px;
-    border-radius:15px;
-    margin-bottom:25px;
+    margin-top:20px;
+    background:rgba(255,255,255,.2);
+    border:1px solid rgba(255,255,255,.25);
+    backdrop-filter:blur(10px);
+    padding:14px;
+    border-radius:14px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
 }
 
-.tableBox input{
+.searchBox{
+    margin:25px 0;
+}
+
+.searchBox input{
     width:100%;
-    margin-top:10px;
-    padding:12px;
-    font-size:18px;
-    border-radius:8px;
-}
-
-.categories{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-}
-
-.categories button{
-    padding:20px;
-    font-size:18px;
+    padding:16px;
     border:none;
-    border-radius:15px;
-    background:#6d213c;
-    color:white;
-    cursor:pointer;
+    border-radius:14px;
+    font-size:18px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
 }
 
-.startButton{
-    margin-top:30px;
-    width:100%;
-    padding:18px;
-    border:none;
-    border-radius:15px;
-    background:#0b8f42;
-    color:white;
+.categoryTitle{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:35px;
+    margin-bottom:18px;
+    font-size:28px;
+    font-weight:bold;
+    color:#333;
+    border-bottom:2px solid #ddd;
+    padding-bottom:10px;
+}
+
+.emptyProducts{
+    text-align:center;
+    margin-top:50px;
+    color:#777;
     font-size:20px;
-    cursor:pointer;
-}
-.productCard{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-background:white;
-
-padding:18px;
-
-margin-bottom:12px;
-
-border-radius:12px;
-
-}
-
-.productCard button{
-
-width:45px;
-
-height:45px;
-
-border:none;
-
-border-radius:50%;
-
-background:#6d213c;
-
-color:white;
-
-font-size:24px;
-
-cursor:pointer;
-
-}.home{
-
-padding-bottom:130px;
-
 }

@@ -1,43 +1,43 @@
-import { useCart } from "../context/CartContext";
 import "./ProductCard.css";
+import { useCart } from "../context/CartContext";
 
 function ProductCard({ product }) {
-  const { items, addItem, removeItem } = useCart();
-
-  const cartItem = items.find((item) => item.id === product.id);
-  const quantity = cartItem ? cartItem.quantity : 0;
+  const { addItem } = useCart();
 
   return (
     <div className="product-card">
+      <div className="product-image">
+        {product.image ? (
+          <img
+            src={product.image}
+            alt={product.name}
+          />
+        ) : (
+          <div className="placeholder">
+            🥤
+          </div>
+        )}
+      </div>
 
       <div className="product-info">
         <h3>{product.name}</h3>
-        <span>€ {product.price.toFixed(2)}</span>
+
+        {product.description && (
+          <p>{product.description}</p>
+        )}
+
+        <div className="product-footer">
+          <span className="price">
+            € {Number(product.price).toFixed(2)}
+          </span>
+
+          <button
+            onClick={() => addItem(product)}
+          >
+            +
+          </button>
+        </div>
       </div>
-
-      <div className="product-actions">
-
-        <button
-          className="minus"
-          onClick={() => removeItem(product.id)}
-          disabled={quantity === 0}
-        >
-          −
-        </button>
-
-        <span className="quantity">
-          {quantity}
-        </span>
-
-        <button
-          className="plus"
-          onClick={() => addItem(product)}
-        >
-          +
-        </button>
-
-      </div>
-
     </div>
   );
 }
