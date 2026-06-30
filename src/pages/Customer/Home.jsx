@@ -6,17 +6,27 @@ import ProductCard from "../../components/ProductCard";
 import FloatingCart from "../../components/FloatingCart";
 
 function Home() {
-  const [ombrellone, setOmbrellone] = useState(null);
+  const [ombrellone, setOmbrellone] = useState("");
 
   useEffect(() => {
+    console.log("URL completa:", window.location.href);
+
     const params = new URLSearchParams(window.location.search);
+
+    console.log("Query string:", window.location.search);
+
     const numero = params.get("ombrellone");
 
+    console.log("Parametro ombrellone:", numero);
+
     if (numero) {
-      setOmbrellone(numero);
       localStorage.setItem("ombrellone", numero);
+      setOmbrellone(numero);
     } else {
       const salvato = localStorage.getItem("ombrellone");
+
+      console.log("Ombrellone salvato:", salvato);
+
       if (salvato) {
         setOmbrellone(salvato);
       }
@@ -29,8 +39,34 @@ function Home() {
         <h1>🏖 Toscana Sport Resort</h1>
         <p>Pool Bar</p>
 
-        {ombrellone && (
-          <h2>🏖 Ombrellone {ombrellone}</h2>
+        {ombrellone ? (
+          <div
+            style={{
+              background: "#198754",
+              color: "#fff",
+              padding: "15px",
+              borderRadius: "12px",
+              marginTop: "20px",
+              fontSize: "22px",
+              fontWeight: "bold",
+              textAlign: "center",
+            }}
+          >
+            🏖 Ombrellone {ombrellone}
+          </div>
+        ) : (
+          <div
+            style={{
+              background: "#ffc107",
+              color: "#000",
+              padding: "15px",
+              borderRadius: "12px",
+              marginTop: "20px",
+              textAlign: "center",
+            }}
+          >
+            ⚠️ Nessun ombrellone selezionato
+          </div>
         )}
       </header>
 
