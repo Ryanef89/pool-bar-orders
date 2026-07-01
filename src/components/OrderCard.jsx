@@ -11,14 +11,37 @@ function OrderCard({ order }) {
     switch (status) {
       case "new":
         return "#dc3545";
+
       case "Preparazione":
         return "#ffc107";
+
       case "Consegnato":
         return "#198754";
+
       case "Archiviato":
         return "#6c757d";
+
       default:
         return "#6c757d";
+    }
+  }
+
+  function getStatusLabel(status) {
+    switch (status) {
+      case "new":
+        return "🟥 NUOVO";
+
+      case "Preparazione":
+        return "🟨 PREPARAZIONE";
+
+      case "Consegnato":
+        return "🟩 CONSEGNATO";
+
+      case "Archiviato":
+        return "📦 ARCHIVIATO";
+
+      default:
+        return status;
     }
   }
 
@@ -26,54 +49,86 @@ function OrderCard({ order }) {
     <div
       className="order-card"
       style={{
-        borderLeft: `8px solid ${getStatusColor(order.status)}`,
+        borderLeft: `8px solid ${getStatusColor(
+          order.status
+        )}`,
       }}
     >
       <div className="order-header">
         <h2
-          style={{ cursor: "pointer" }}
+          style={{
+            cursor: "pointer",
+          }}
           onClick={() =>
             navigate("/admin/ombrelloni")
           }
         >
-          🏖 {order.ombrellone}
+          🏖 OMBRELLONE {order.ombrellone}
         </h2>
 
         {order.createdAt && (
-          <OrderTimer createdAt={order.createdAt} />
+          <OrderTimer
+            createdAt={order.createdAt}
+          />
         )}
       </div>
 
       <div
         className="status"
         style={{
-          background: getStatusColor(order.status),
+          background: getStatusColor(
+            order.status
+          ),
         }}
       >
-        {order.status}
+        {getStatusLabel(order.status)}
       </div>
 
       <div className="items">
         {order.items.map((item) => (
-          <div key={item.id} className="item">
-            <span>{item.name}</span>
-            <strong>x{item.quantity}</strong>
+          <div
+            key={item.id}
+            className="item"
+          >
+            <span>
+              {item.name}
+            </span>
+
+            <strong>
+              × {item.quantity}
+            </strong>
           </div>
         ))}
       </div>
 
+      {order.notes &&
+        order.notes.trim() !== "" && (
+          <div className="notes">
+            <div className="notes-title">
+              📝 NOTE CLIENTE
+            </div>
+
+            {order.notes}
+          </div>
+        )}
+
       <div className="total">
-        € {Number(order.total).toFixed(2)}
+        💶 €
+        {" "}
+        {Number(order.total).toFixed(2)}
       </div>
 
       <div className="actions">
         <button
           className="prep"
           onClick={() =>
-            updateOrderStatus(order.id, "Preparazione")
+            updateOrderStatus(
+              order.id,
+              "Preparazione"
+            )
           }
         >
-          👨‍🍳
+          👨‍🍳 Preparazione
         </button>
 
         <button
@@ -84,27 +139,33 @@ function OrderCard({ order }) {
               "Consegnato"
             );
 
-            announceOrder(order.ombrellone);
+            announceOrder(
+              order.ombrellone
+            );
           }}
         >
-          ✅
+          ✅ Consegnato
         </button>
 
         <button
           className="archive"
           onClick={() =>
-            updateOrderStatus(order.id, "Archiviato")
+            updateOrderStatus(
+              order.id,
+              "Archiviato"
+            )
           }
         >
-          📦
+          📦 Archivia
         </button>
 
         <button
+          className="view"
           onClick={() =>
             navigate("/admin/ombrelloni")
           }
         >
-          👁
+          👁 Ombrellone
         </button>
       </div>
     </div>

@@ -14,10 +14,12 @@ export function listenOrders(callback) {
   );
 
   return onSnapshot(q, (snapshot) => {
-    const orders = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const orders = snapshot.docs
+      .map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+      .filter((order) => order.closed !== true);
 
     callback(orders);
   });

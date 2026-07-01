@@ -1,67 +1,107 @@
 .order-card{
-    background:white;
-    border-radius:18px;
-    padding:18px;
-    margin-bottom:15px;
-    box-shadow:0 8px 18px rgba(0,0,0,.08);
+    background:#fff;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.2s;
+}
+
+.order-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 25px rgba(0,0,0,.12);
 }
 
 .order-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    gap:15px;
 }
 
 .order-header h2{
     margin:0;
-    font-size:28px;
+    font-size:34px;
+    font-weight:700;
 }
 
 .status{
     display:inline-block;
-    margin-top:12px;
-    color:white;
-    padding:6px 14px;
-    border-radius:30px;
+    margin-top:15px;
+    color:#fff;
+    padding:8px 18px;
+    border-radius:999px;
     font-weight:bold;
+    font-size:15px;
+    letter-spacing:.5px;
+    text-transform:uppercase;
 }
 
 .items{
-    margin-top:18px;
+    margin-top:22px;
+    border-top:1px solid #eee;
+    border-bottom:1px solid #eee;
+    padding:15px 0;
 }
 
 .item{
     display:flex;
     justify-content:space-between;
-    margin-bottom:10px;
+    align-items:center;
+    margin-bottom:12px;
     font-size:18px;
 }
 
-.total{
+.item:last-child{
+    margin-bottom:0;
+}
+
+.notes{
     margin-top:18px;
-    font-size:30px;
-    color:#198754;
+    background:#fff8dd;
+    border-left:5px solid #ffc107;
+    border-radius:12px;
+    padding:14px;
+}
+
+.notes-title{
     font-weight:bold;
+    margin-bottom:8px;
+}
+
+.total{
+    margin-top:20px;
+    text-align:right;
+    font-size:34px;
+    font-weight:bold;
+    color:#198754;
 }
 
 .actions{
-    display:flex;
-    gap:10px;
-    margin-top:18px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    margin-top:22px;
 }
 
 .actions button{
-    flex:1;
     border:none;
     border-radius:12px;
     padding:14px;
     cursor:pointer;
-    color:white;
-    font-size:22px;
+    color:#fff;
+    font-size:16px;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.actions button:hover{
+    transform:scale(1.03);
 }
 
 .prep{
     background:#ffc107;
+    color:#222 !important;
 }
 
 .done{
@@ -70,4 +110,30 @@
 
 .archive{
     background:#6c757d;
+}
+
+.view{
+    background:#0d6efd;
+}
+
+@media(max-width:768px){
+
+    .order-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .order-header h2{
+        font-size:30px;
+    }
+
+    .actions{
+        grid-template-columns:1fr;
+    }
+
+    .total{
+        text-align:left;
+        font-size:30px;
+    }
+
 }

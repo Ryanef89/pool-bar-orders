@@ -31,7 +31,12 @@ function Cart() {
     }
 
     setSending(true);
-
+console.log("ORDINE DA INVIARE:", {
+  ombrellone,
+  items,
+  total,
+  notes,
+});
     const result = await sendOrder({
       ombrellone,
       items,

@@ -1,9 +1,12 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../services/authService";
+import { useTheme } from "../../context/ThemeContext";
 
 function AdminHeader() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { dark, toggleTheme } = useTheme();
 
   const menu = [
     { label: "🏠 Dashboard", path: "/admin" },
@@ -19,6 +22,14 @@ function AdminHeader() {
     navigate("/admin/login");
   }
 
+  async function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      await document.documentElement.requestFullscreen();
+    } else {
+      await document.exitFullscreen();
+    }
+  }
+
   return (
     <div
       style={{
@@ -29,7 +40,8 @@ function AdminHeader() {
         gap: 10,
         marginBottom: 30,
         padding: 20,
-        background: "#fff",
+        background: dark ? "#1f2937" : "#fff",
+        color: dark ? "#fff" : "#000",
         borderRadius: 15,
         boxShadow: "0 5px 15px rgba(0,0,0,.08)",
       }}
@@ -57,9 +69,13 @@ function AdminHeader() {
               background:
                 location.pathname === item.path
                   ? "#0b8457"
+                  : dark
+                  ? "#374151"
                   : "#eee",
               color:
                 location.pathname === item.path
+                  ? "#fff"
+                  : dark
                   ? "#fff"
                   : "#333",
             }}
@@ -67,6 +83,34 @@ function AdminHeader() {
             {item.label}
           </button>
         ))}
+
+        <button
+          onClick={toggleTheme}
+          style={{
+            padding: "10px 16px",
+            border: "none",
+            borderRadius: 8,
+            cursor: "pointer",
+            background: "#6f42c1",
+            color: "#fff",
+          }}
+        >
+          {dark ? "🌞 Chiaro" : "🌙 Scuro"}
+        </button>
+
+        <button
+          onClick={toggleFullscreen}
+          style={{
+            padding: "10px 16px",
+            border: "none",
+            borderRadius: 8,
+            cursor: "pointer",
+            background: "#0d6efd",
+            color: "#fff",
+          }}
+        >
+          ⛶ Full Screen
+        </button>
 
         <button
           onClick={handleLogout}

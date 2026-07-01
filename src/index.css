@@ -111,4 +111,42 @@ button{
   width:100%;
 }
 
+}/* ========================= */
+/*          THEME            */
+/* ========================= */
+
+body.light-theme {
+  --bg: #f4f6f9;
+  --card: #ffffff;
+  --text: #222;
+  --text-secondary: #666;
+  --border: #e5e5e5;
+  --button: #eeeeee;
+}
+
+body.dark-theme {
+  --bg: #111827;
+  --card: #1f2937;
+  --text: #f9fafb;
+  --text-secondary: #cbd5e1;
+  --border: #374151;
+  --button: #374151;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: .25s;
+}
+
+input,
+textarea,
+select {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+button {
+  transition: .2s;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { listenOrders } from "../../services/orderListener";
-
+import { closeDay } from "../../services/closeDayService";
 import AdminHeader from "../../components/admin/AdminHeader";
 import DashboardStats from "../../components/admin/DashboardStats";
 import OrderColumn from "../../components/OrderColumn";
@@ -29,11 +29,13 @@ function Dashboard() {
     previousCount.current = orders.length;
   }, [orders]);
 
-  const filteredOrders = orders.filter((order) =>
-    order.ombrellone
-      ?.toString()
-      .includes(search.trim())
-  );
+  console.log("ORDERS:", orders);
+
+const filteredOrders = orders.filter((order) =>
+  order.ombrellone
+    ?.toString()
+    .includes(search.trim())
+);
 
   const nuovi = filteredOrders.filter(
     (o) => o.status === "new"
@@ -78,7 +80,38 @@ function Dashboard() {
           marginBottom: 25,
         }}
       />
+<div
+  style={{
+    marginBottom: 25,
+  }}
+>
+  <button
+    onClick={async () => {
+      const ok = window.confirm(
+        "Archiviare tutti gli ordini della giornata?"
+      );
 
+      if (!ok) return;
+
+      await closeDay();
+
+      alert("✅ Giornata chiusa con successo.");
+
+      window.location.reload();
+    }}
+    style={{
+      background: "#343a40",
+      color: "#fff",
+      border: "none",
+      padding: "12px 20px",
+      borderRadius: 10,
+      cursor: "pointer",
+      fontWeight: "bold",
+    }}
+  >
+    🌙 Chiusura giornata
+  </button>
+</div>
       <DashboardStats orders={filteredOrders} />
 
       <div
