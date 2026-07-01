@@ -1,13 +1,21 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
+  const [notes, setNotes] = useState("");
 
   function addItem(product) {
     setItems((current) => {
-      const existing = current.find((item) => item.id === product.id);
+      const existing = current.find(
+        (item) => item.id === product.id
+      );
 
       if (existing) {
         return current.map((item) =>
@@ -30,7 +38,20 @@ export function CartProvider({ children }) {
     });
   }
 
-  function removeItem(id) {
+  function increaseQuantity(id) {
+    setItems((current) =>
+      current.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              quantity: item.quantity + 1,
+            }
+          : item
+      )
+    );
+  }
+
+  function decreaseQuantity(id) {
     setItems((current) =>
       current
         .map((item) =>
@@ -45,13 +66,21 @@ export function CartProvider({ children }) {
     );
   }
 
+  function removeItem(id) {
+    setItems((current) =>
+      current.filter((item) => item.id !== id)
+    );
+  }
+
   function clearCart() {
     setItems([]);
+    setNotes("");
   }
 
   const total = useMemo(() => {
     return items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
+      (sum, item) =>
+        sum + item.price * item.quantity,
       0
     );
   }, [items]);
@@ -60,11 +89,14 @@ export function CartProvider({ children }) {
     <CartContext.Provider
       value={{
         items,
-        setItems,
         addItem,
+        increaseQuantity,
+        decreaseQuantity,
         removeItem,
         clearCart,
         total,
+        notes,
+        setNotes,
       }}
     >
       {children}

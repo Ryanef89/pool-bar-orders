@@ -5,19 +5,20 @@ import { useCart } from "../context/CartContext";
 function FloatingCart() {
   const navigate = useNavigate();
 
-  const { cart } = useCart();
+  const { items } = useCart();
 
-  const totalItems = cart.reduce(
+  const totalItems = items.reduce(
     (sum, item) => sum + item.quantity,
     0
   );
 
-  const totalPrice = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+  const totalPrice = items.reduce(
+    (sum, item) =>
+      sum + item.price * item.quantity,
     0
   );
 
-  if (cart.length === 0) return null;
+  if (items.length === 0) return null;
 
   return (
     <div className="floating-cart">
@@ -27,9 +28,7 @@ function FloatingCart() {
         <span>€ {totalPrice.toFixed(2)}</span>
       </div>
 
-      <button
-        onClick={() => navigate("/cart")}
-      >
+      <button onClick={() => navigate("/cart")}>
         Vai al carrello →
       </button>
     </div>

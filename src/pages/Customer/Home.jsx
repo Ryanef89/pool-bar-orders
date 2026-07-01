@@ -27,6 +27,8 @@ function Home() {
   const [products, setProducts] = useState([]);
   const [ombrellone, setOmbrellone] = useState("");
   const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] =
+  useState("Tutte");
 
   useEffect(() => {
     loadProducts();
@@ -60,7 +62,15 @@ function Home() {
         (product.description || "")
       ).toLowerCase();
 
-      return text.includes(search.toLowerCase());
+      const okSearch = text.includes(
+  search.toLowerCase()
+);
+
+const okCategory =
+  selectedCategory === "Tutte" ||
+  product.category === selectedCategory;
+
+return okSearch && okCategory;
     });
   }, [products, search]);
 
@@ -77,6 +87,7 @@ function Home() {
   }, [filteredProducts]);
 
   return (
+    
     <div className="home">
       <header className="header">
         <h1>🏖 Toscana Sport Resort</h1>
@@ -89,6 +100,27 @@ function Home() {
             : "⚠️ Nessun ombrellone"}
         </div>
       </header>
+      <div
+  style={{
+    display: "flex",
+    gap: 10,
+    flexWrap: "wrap",
+    marginBottom: 20,
+  }}
+>
+  <button onClick={() => setSelectedCategory("Tutte")}>
+    Tutte
+  </button>
+
+  {categoryOrder.map((cat) => (
+    <button
+      key={cat}
+      onClick={() => setSelectedCategory(cat)}
+    >
+      {categoryIcons[cat]} {cat}
+    </button>
+  ))}
+</div>
 
       <div className="searchBox">
         <input

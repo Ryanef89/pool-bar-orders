@@ -13,32 +13,64 @@ function DashboardStats({ orders }) {
     (o) => o.status === "Consegnato"
   ).length;
 
+  const archiviati = orders.filter(
+    (o) => o.status === "Archiviato"
+  ).length;
+
   const totale = orders.reduce(
     (sum, order) => sum + Number(order.total || 0),
     0
   );
 
+  const media =
+    orders.length > 0
+      ? totale / orders.length
+      : 0;
+
+  const cards = [
+    {
+      title: "🔔 Nuovi",
+      value: nuovi,
+      className: "red",
+    },
+    {
+      title: "👨‍🍳 Preparazione",
+      value: preparazione,
+      className: "yellow",
+    },
+    {
+      title: "✅ Consegnati",
+      value: consegnati,
+      className: "green",
+    },
+    {
+      title: "📦 Archivio",
+      value: archiviati,
+      className: "blue",
+    },
+    {
+      title: "💰 Incasso",
+      value: `€ ${totale.toFixed(2)}`,
+      className: "green",
+    },
+    {
+      title: "💳 Media Ordine",
+      value: `€ ${media.toFixed(2)}`,
+      className: "blue",
+    },
+  ];
+
   return (
     <div className="statsGrid">
-      <div className="statCard red">
-        <h3>Nuovi</h3>
-        <span>{nuovi}</span>
-      </div>
-
-      <div className="statCard yellow">
-        <h3>Preparazione</h3>
-        <span>{preparazione}</span>
-      </div>
-
-      <div className="statCard green">
-        <h3>Consegnati</h3>
-        <span>{consegnati}</span>
-      </div>
-
-      <div className="statCard blue">
-        <h3>Incasso</h3>
-        <span>€ {totale.toFixed(2)}</span>
-      </div>
+      {cards.map((card) => (
+        <div
+          key={card.title}
+          className={`statCard ${card.className}`}
+        >
+          <h3>{card.title}</h3>
+          <span>{card.value}</span>
+        </div>
+      ))}
     </div>
   );
 }

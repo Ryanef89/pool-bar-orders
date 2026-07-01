@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { listenOrders } from "../../services/orderListener";
 
+import AdminHeader from "../../components/admin/AdminHeader";
 import DashboardStats from "../../components/admin/DashboardStats";
 import OrderColumn from "../../components/OrderColumn";
 
@@ -12,7 +13,6 @@ function Dashboard() {
 
   useEffect(() => {
     const unsubscribe = listenOrders(setOrders);
-
     return () => unsubscribe();
   }, []);
 
@@ -21,8 +21,9 @@ function Dashboard() {
       previousCount.current > 0 &&
       orders.length > previousCount.current
     ) {
-      const audio = new Audio("/sounds/new-order.mp3");
-      audio.play().catch(() => {});
+      new Audio("/sounds/new-order.mp3")
+        .play()
+        .catch(() => {});
     }
 
     previousCount.current = orders.length;
@@ -35,19 +36,19 @@ function Dashboard() {
   );
 
   const nuovi = filteredOrders.filter(
-    (order) => order.status === "new"
+    (o) => o.status === "new"
   );
 
   const preparazione = filteredOrders.filter(
-    (order) => order.status === "Preparazione"
+    (o) => o.status === "Preparazione"
   );
 
   const consegnati = filteredOrders.filter(
-    (order) => order.status === "Consegnato"
+    (o) => o.status === "Consegnato"
   );
 
   const archiviati = filteredOrders.filter(
-    (order) => order.status === "Archiviato"
+    (o) => o.status === "Archiviato"
   );
 
   return (
@@ -55,78 +56,59 @@ function Dashboard() {
       style={{
         background: "#f4f7fb",
         minHeight: "100vh",
-        padding: "30px",
+        padding: 30,
       }}
     >
-      <h1
-        style={{
-          marginBottom: "10px",
-          color: "#2d3436",
-        }}
-      >
-        🍹 Dashboard Pool Bar
-      </h1>
+      <AdminHeader />
 
-      <p
-        style={{
-          color: "#636e72",
-          marginBottom: "25px",
-        }}
-      >
-        Gestione ordini in tempo reale
-      </p>
+      <h1>🍹 Dashboard</h1>
 
-      <div
+      <input
+        type="text"
+        placeholder="🔍 Cerca ombrellone..."
+        value={search}
+        onChange={(e) =>
+          setSearch(e.target.value)
+        }
         style={{
-          marginBottom: "25px",
+          width: 320,
+          padding: 12,
+          borderRadius: 10,
+          border: "1px solid #ccc",
+          marginBottom: 25,
         }}
-      >
-        <input
-          type="text"
-          placeholder="🔍 Cerca ombrellone..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            width: "100%",
-            maxWidth: "350px",
-            padding: "12px",
-            borderRadius: "10px",
-            border: "1px solid #ccc",
-            fontSize: "16px",
-          }}
-        />
-      </div>
+      />
 
       <DashboardStats orders={filteredOrders} />
 
       <div
         style={{
-          display: "flex",
-          gap: "20px",
-          alignItems: "flex-start",
-          flexWrap: "wrap",
+          display: "grid",
+          gridTemplateColumns:
+            "repeat(auto-fit,minmax(340px,1fr))",
+          gap: 20,
         }}
       >
         <OrderColumn
-          title="🟥 Nuovi"
+          title={`🟥 Nuovi (${nuovi.length})`}
           color="#dc3545"
           orders={nuovi}
         />
 
         <OrderColumn
-          title="🟨 Preparazione"
+          title={`🟨 Preparazione (${preparazione.length})`}
           color="#ffc107"
           orders={preparazione}
         />
 
         <OrderColumn
-          title="🟩 Consegnati"
+          title={`🟩 Consegnati (${consegnati.length})`}
           color="#198754"
           orders={consegnati}
         />
 
         <OrderColumn
-          title="📦 Archivio"
+          title={`📦 Archivio (${archiviati.length})`}
           color="#6c757d"
           orders={archiviati}
         />

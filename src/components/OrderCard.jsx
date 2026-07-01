@@ -1,23 +1,22 @@
 import "./OrderCard.css";
+import { useNavigate } from "react-router-dom";
 import OrderTimer from "./admin/OrderTimer";
 import { updateOrderStatus } from "../services/updateOrderStatus";
 import { announceOrder } from "../services/speechService";
 
 function OrderCard({ order }) {
+  const navigate = useNavigate();
+
   function getStatusColor(status) {
     switch (status) {
       case "new":
         return "#dc3545";
-
       case "Preparazione":
         return "#ffc107";
-
       case "Consegnato":
         return "#198754";
-
       case "Archiviato":
         return "#6c757d";
-
       default:
         return "#6c757d";
     }
@@ -31,7 +30,14 @@ function OrderCard({ order }) {
       }}
     >
       <div className="order-header">
-        <h2>🏖 {order.ombrellone}</h2>
+        <h2
+          style={{ cursor: "pointer" }}
+          onClick={() =>
+            navigate("/admin/ombrelloni")
+          }
+        >
+          🏖 {order.ombrellone}
+        </h2>
 
         {order.createdAt && (
           <OrderTimer createdAt={order.createdAt} />
@@ -49,12 +55,8 @@ function OrderCard({ order }) {
 
       <div className="items">
         {order.items.map((item) => (
-          <div
-            key={item.id}
-            className="item"
-          >
+          <div key={item.id} className="item">
             <span>{item.name}</span>
-
             <strong>x{item.quantity}</strong>
           </div>
         ))}
@@ -68,10 +70,7 @@ function OrderCard({ order }) {
         <button
           className="prep"
           onClick={() =>
-            updateOrderStatus(
-              order.id,
-              "Preparazione"
-            )
+            updateOrderStatus(order.id, "Preparazione")
           }
         >
           👨‍🍳
@@ -94,13 +93,18 @@ function OrderCard({ order }) {
         <button
           className="archive"
           onClick={() =>
-            updateOrderStatus(
-              order.id,
-              "Archiviato"
-            )
+            updateOrderStatus(order.id, "Archiviato")
           }
         >
           📦
+        </button>
+
+        <button
+          onClick={() =>
+            navigate("/admin/ombrelloni")
+          }
+        >
+          👁
         </button>
       </div>
     </div>
