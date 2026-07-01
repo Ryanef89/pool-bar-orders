@@ -1,69 +1,89 @@
-import AdminHeader from "../../components/admin/AdminHeader";
-import { QRCodeSVG } from "qrcode.react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { logout } from "../../services/authService";
 
-function QRCodes() {
-  const totalOmbrelloni = 40;
+function AdminHeader() {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const baseUrl = window.location.origin;
+  const menu = [
+    { label: "🏠 Dashboard", path: "/admin" },
+    { label: "📦 Prodotti", path: "/admin/products" },
+    { label: "🏖 Ombrelloni", path: "/admin/ombrelloni" },
+    { label: "📱 QR Code", path: "/admin/qrcodes" },
+    { label: "📊 Statistiche", path: "/admin/statistiche" },
+    { label: "⚙️ Impostazioni", path: "/admin/settings" },
+  ];
+
+  async function handleLogout() {
+    await logout();
+    navigate("/admin/login");
+  }
 
   return (
     <div
       style={{
-        padding: 30,
-        background: "#f4f7fb",
-        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: 10,
+        marginBottom: 30,
+        padding: 20,
+        background: "#fff",
+        borderRadius: 15,
+        boxShadow: "0 5px 15px rgba(0,0,0,.08)",
       }}
     >
-      <AdminHeader />
-
-      <h1>📱 QR Code Ombrelloni</h1>
-
-      <p style={{ marginBottom: 30 }}>
-        Scansionando il QR il cliente accederà
-        direttamente al menu con l'ombrellone già
-        selezionato.
-      </p>
+      <h2 style={{ margin: 0 }}>
+        🍹 Pool Bar Admin
+      </h2>
 
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns:
-            "repeat(auto-fill,minmax(180px,1fr))",
-          gap: 25,
+          display: "flex",
+          gap: 10,
+          flexWrap: "wrap",
         }}
       >
-        {Array.from(
-          { length: totalOmbrelloni },
-          (_, i) => i + 1
-        ).map((numero) => (
-          <div
-            key={numero}
+        {menu.map((item) => (
+          <button
+            key={item.path}
+            onClick={() => navigate(item.path)}
             style={{
-              background: "#fff",
-              padding: 20,
-              borderRadius: 15,
-              textAlign: "center",
-              boxShadow:
-                "0 5px 15px rgba(0,0,0,.08)",
+              padding: "10px 16px",
+              border: "none",
+              borderRadius: 8,
+              cursor: "pointer",
+              background:
+                location.pathname === item.path
+                  ? "#0b8457"
+                  : "#eee",
+              color:
+                location.pathname === item.path
+                  ? "#fff"
+                  : "#333",
             }}
           >
-            <QRCodeSVG
-              value={`${baseUrl}/?ombrellone=${numero}`}
-              size={140}
-            />
-
-            <h3
-              style={{
-                marginTop: 15,
-              }}
-            >
-              🏖 {numero}
-            </h3>
-          </div>
+            {item.label}
+          </button>
         ))}
+
+        <button
+          onClick={handleLogout}
+          style={{
+            padding: "10px 16px",
+            border: "none",
+            borderRadius: 8,
+            cursor: "pointer",
+            background: "#dc3545",
+            color: "#fff",
+          }}
+        >
+          Logout
+        </button>
       </div>
     </div>
   );
 }
 
-export default QRCodes;
+export default AdminHeader;
